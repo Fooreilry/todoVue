@@ -25,7 +25,7 @@ export default {
     },
     data() {
         return {
-            todos: [{id: 1, text: 'Дело 1'}],
+            todos: [],
         }
     },
     methods: {
