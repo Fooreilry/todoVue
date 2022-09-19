@@ -52,7 +52,7 @@ export default {
         },
         async loadTodos() {
             const todoData = await localStorage.getItem('todos')
-            this.todos = JSON.parse(todoData)
+            this.todos === null ? this.todos = [] : this.todos = JSON.parse(todoData)
         }
     },
     mounted() {
