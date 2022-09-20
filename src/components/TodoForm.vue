@@ -1,7 +1,7 @@
 <template>
     <div>
         <form class="todo-form" @submit.prevent action="">
-            <input v-model="todo.text" class="todo-form__input" type="text">
+            <input v-model.trim="todo.text" class="todo-form__input" type="text">
             <button @click="createTodo" @keypress.enter="createTodo" class="button add-button">Add</button>
         </form>
     </div>
