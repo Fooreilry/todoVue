@@ -11,6 +11,9 @@
             @remove="removeTodo"
             @complit="saveValue"
             />
+            <ul>
+                <li v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">{{pageNumber}}</li>
+            </ul>
         </div>
     </div>
 </template>
@@ -26,6 +29,9 @@ export default {
     data() {
         return {
             todos: [],
+            limit: 10,
+            totalPages: 0,
+            page: 1,
         }
     },
     methods: {
@@ -37,8 +43,12 @@ export default {
             this.saveTodos()
         },
         removeTodo(index) {
+            console.log(JSON.stringify(localStorage.getItem('todos')).length);
             this.todos.splice(index, 1)
             this.saveTodos()
+        },
+        changePage(pageNumber) {
+            this.page = pageNumber
         },
         saveTodos() {
             try {
@@ -52,7 +62,20 @@ export default {
         },
         async loadTodos() {
             const todoData = await localStorage.getItem('todos')
-            this.todos === null ? this.todos = [] : this.todos = JSON.parse(todoData)
+            todoData === null ? this.todos = [] : this.todos = JSON.parse(todoData)
+            console.log(this.todos);
+        }
+    },
+    computed: {
+        totalPages() {
+            const countTodos = this.todos.length
+            return this.totalPages = Math.ceil(countTodos/this.limit)
+        },
+        todos() {
+            
+            const start = (this.page -1) * this.limit,
+                end = start + this.limit;
+            return this.todos.slice(start, end)
         }
     },
     mounted() {
