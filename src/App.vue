@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    // script
 import TodoForm from "./components/TodoForm.vue";
 import TodoList from "./components/TodoList.vue"
 export default {
