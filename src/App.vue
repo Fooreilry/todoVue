@@ -70,7 +70,6 @@ export default {
             return this.totalPages = Math.ceil(this.todos.length / this.limit)
         },
         todos() {
-            console.log("b");
             const start = (this.page -1) * this.limit,
                 end = start + this.limit;
             return this.todos.slice(start, end)
