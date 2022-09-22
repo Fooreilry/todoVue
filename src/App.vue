@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             todos: [],
-            limit: 10,
+            limit: 8,
             totalPages: 0,
             page: 1,
         }
@@ -63,16 +63,14 @@ export default {
         async loadTodos() {
             const todoData = await localStorage.getItem('todos')
             todoData === null ? this.todos = [] : this.todos = JSON.parse(todoData)
-            console.log(this.todos);
         }
     },
     computed: {
         totalPages() {
-            const countTodos = this.todos.length
-            return this.totalPages = Math.ceil(countTodos/this.limit)
+            return this.totalPages = Math.ceil(this.todos.length / this.limit)
         },
         todos() {
-            
+            console.log("b");
             const start = (this.page -1) * this.limit,
                 end = start + this.limit;
             return this.todos.slice(start, end)
