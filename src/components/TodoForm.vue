@@ -11,7 +11,6 @@ export default {
     data() {
         return {
             todo: {
-                complit: false,
                 text: ''
             }
         }
@@ -20,6 +19,7 @@ export default {
         createTodo() {
             if (this.todo.text.length !== 0) {
                 this.todo.id = Date.now()
+                this.todo.complit = false
                 this.$emit('create', this.todo)
                 this.todo = {
                 text: ''

@@ -6,8 +6,8 @@
             <todo-form
             @create="createTodo"
             />
-            <todo-list 
-            :todos="todos"
+            <todo-list
+            :todos="todosCount"
             @remove="removeTodo"
             @complit="saveValue"
             />
@@ -19,12 +19,26 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import useLocalStorage from './hooks/useLocalStorage'
+import useTodos from './hooks/useTodos'
 import TodoForm from "./components/TodoForm.vue";
 import TodoList from "./components/TodoList.vue"
 export default {
+    // setup(props, todo) {
+    //         console.log(props);
+    //     const { todos, createTodo } = useTodos(todo)
+    //     const {saveTodos} = useLocalStorage(todos)
+    //     return {
+    //         todos,
+    //         createTodo,
+    //         saveTodos
+    //     }
+
+    // },
     components: {
         TodoForm,
-        TodoList
+        TodoList,
     },
     data() {
         return {
@@ -32,6 +46,11 @@ export default {
             limit: 8,
             totalPages: 0,
             page: 1,
+            sortValue: '',
+            sortOptions: [
+                { value: 'complit', name: 'Выполненные' },
+                { value: 'complit', name: 'Невыполненные' }
+            ]
         }
     },
     methods: {
@@ -39,7 +58,9 @@ export default {
             this.todos.push(todo)
             this.saveTodos()
         },
-        saveValue() {
+        saveValue(todo) {
+            console.log(todo);
+            this.todos.sort((a, b) => (a.complit > b.complit) ? 1:-1) //Сортировка))))
             this.saveTodos()
         },
         removeTodo(index) {
@@ -47,6 +68,11 @@ export default {
             this.todos.splice(index, 1)
             this.saveTodos()
         },
+        // sortTodos(todo) {
+        //     if (todo === true) {
+                
+        //     }
+        // },
         changePage(pageNumber) {
             this.page = pageNumber
         },
@@ -56,7 +82,7 @@ export default {
                 localStorage.setItem('todos', todosParsed)
             }
             catch(err) {
-                alert('local storage is full')
+                console.log(err);
             }
 
         },
@@ -69,15 +95,16 @@ export default {
         totalPages() {
             return this.totalPages = Math.ceil(this.todos.length / this.limit)
         },
-        todos() {
+        todosCount() {
             const start = (this.page -1) * this.limit,
                 end = start + this.limit;
             return this.todos.slice(start, end)
-        }
+        },
     },
     mounted() {
         this.loadTodos()
     },
+
 }
 </script>
 
