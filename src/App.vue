@@ -6,6 +6,18 @@
             <todo-form
             @create="createTodo"
             />
+            <div>
+                <!-- component filterButton -->
+                <button
+                v-for="option in filteOptions" 
+                type="button" 
+                :value="option.value"
+                :key="option.value"
+                @click="changeFilter(option)"
+                >
+                {{option.name}}
+            </button>
+            </div>
             <todo-list
             :todos="todosCount"
             @remove="removeTodo"
@@ -19,26 +31,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import useLocalStorage from './hooks/useLocalStorage'
-import useTodos from './hooks/useTodos'
 import TodoForm from "./components/TodoForm.vue";
 import TodoList from "./components/TodoList.vue"
 export default {
-    // setup(props, todo) {
-    //         console.log(props);
-    //     const { todos, createTodo } = useTodos(todo)
-    //     const {saveTodos} = useLocalStorage(todos)
-    //     return {
-    //         todos,
-    //         createTodo,
-    //         saveTodos
-    //     }
-
-    // },
     components: {
         TodoForm,
         TodoList,
+        
     },
     data() {
         return {
@@ -46,10 +45,11 @@ export default {
             limit: 8,
             totalPages: 0,
             page: 1,
-            sortValue: '',
-            sortOptions: [
+            // sortValue: '',
+            filteOptions: [
+                { value: 'all', name: 'Все' },
                 { value: 'complit', name: 'Выполненные' },
-                { value: 'complit', name: 'Невыполненные' }
+                { value: 'uncomplit', name: 'Невыполненные' }
             ]
         }
     },
@@ -58,9 +58,10 @@ export default {
             this.todos.push(todo)
             this.saveTodos()
         },
+        
         saveValue(todo) {
             console.log(todo);
-            this.todos.sort((a, b) => (a.complit > b.complit) ? 1:-1) //Сортировка))))
+            // this.todos.sort((a, b) => (a.complit > b.complit) ? 1:-1) //Сортировка))))
             this.saveTodos()
         },
         removeTodo(index) {
@@ -73,6 +74,20 @@ export default {
                 
         //     }
         // },
+        changeFilter(option){
+            //доделать create func changeFilter and add in ths com-d
+            console.log(option);
+            const sortData = JSON.parse(localStorage.getItem('todos'))
+                if (option.value === 'all') {
+                    this.todos = sortData
+                }
+                if(option.value === 'complit'){
+                    this.todos = sortData.filter(e => e.complit === true)
+                }
+                if(option.value === 'uncomplit'){
+                    this.todos = sortData   .filter(e => e.complit === false)
+                }
+        },
         changePage(pageNumber) {
             this.page = pageNumber
         },
@@ -100,7 +115,10 @@ export default {
                 end = start + this.limit;
             return this.todos.slice(start, end)
         },
+
+
     },
+    
     mounted() {
         this.loadTodos()
     },

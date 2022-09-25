@@ -1,6 +1,6 @@
 <template >
     <select v-model="modelValue" @change="changeOptions">
-        <option disabled value="">Сортировать</option>
+        <option value="">Все</option>
         <option 
         v-for="option in options" 
         :key="option.value" 
