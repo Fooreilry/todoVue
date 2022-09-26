@@ -6,25 +6,21 @@
             <todo-form
             @create="createTodo"
             />
-            <div>
-                <!-- component filterButton -->
-                <button
-                v-for="option in filteOptions" 
-                type="button" 
-                :value="option.value"
-                :key="option.value"
-                @click="changeFilter(option)"
-                >
-                {{option.name}}
-            </button>
+            <div class="todos-filter">
+                <todo-select
+                :options="filteOptions"
+                v-model="sortValue"
+                />
             </div>
             <todo-list
-            :todos="todosCount"
+            :todos="filterValue"
             @remove="removeTodo"
             @complit="saveValue"
             />
-            <ul>
-                <li v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">{{pageNumber}}</li>
+            <ul class="pagination">
+                <li v-for="pageNumber in totalPages" :key="pageNumber">
+                    <button class="pagination-button" :class="{active: page === pageNumber}" @click="changePage(pageNumber)">{{pageNumber}}</button>
+                </li>
             </ul>
         </div>
     </div>
@@ -33,21 +29,22 @@
 <script>
 import TodoForm from "./components/TodoForm.vue";
 import TodoList from "./components/TodoList.vue"
+import TodoSelect from "./components/UI/TodoSelect.vue";
 export default {
     components: {
-        TodoForm,
-        TodoList,
-        
-    },
+    TodoForm,
+    TodoList,
+    TodoSelect
+},
     data() {
         return {
             todos: [],
+            // todosOnePage:[],
             limit: 8,
             totalPages: 0,
             page: 1,
-            // sortValue: '',
+            sortValue: '',
             filteOptions: [
-                { value: 'all', name: 'Все' },
                 { value: 'complit', name: 'Выполненные' },
                 { value: 'uncomplit', name: 'Невыполненные' }
             ]
@@ -64,35 +61,17 @@ export default {
             // this.todos.sort((a, b) => (a.complit > b.complit) ? 1:-1) //Сортировка))))
             this.saveTodos()
         },
-        removeTodo(index) {
-            console.log(JSON.stringify(localStorage.getItem('todos')).length);
-            this.todos.splice(index, 1)
+        removeTodo(todo) {
+            this.todos = this.todos.filter(e => e.id !== todo.id)
             this.saveTodos()
         },
-        // sortTodos(todo) {
-        //     if (todo === true) {
-                
-        //     }
-        // },
-        changeFilter(option){
-            //доделать create func changeFilter and add in ths com-d
-            console.log(option);
-            const sortData = JSON.parse(localStorage.getItem('todos'))
-                if (option.value === 'all') {
-                    this.todos = sortData
-                }
-                if(option.value === 'complit'){
-                    this.todos = sortData.filter(e => e.complit === true)
-                }
-                if(option.value === 'uncomplit'){
-                    this.todos = sortData   .filter(e => e.complit === false)
-                }
-        },
+        
         changePage(pageNumber) {
             this.page = pageNumber
         },
         saveTodos() {
             try {
+                
                 const todosParsed = JSON.stringify(this.todos)
                 localStorage.setItem('todos', todosParsed)
             }
@@ -102,8 +81,11 @@ export default {
 
         },
         async loadTodos() {
-            const todoData = await localStorage.getItem('todos')
-            todoData === null ? this.todos = [] : this.todos = JSON.parse(todoData)
+            const todoData = await JSON.parse(localStorage.getItem('todos'))
+            if (todoData === null) {
+                this.todos = []
+            }
+            this.todos = todoData
         }
     },
     computed: {
@@ -113,12 +95,19 @@ export default {
         todosCount() {
             const start = (this.page -1) * this.limit,
                 end = start + this.limit;
-            return this.todos.slice(start, end)
+            return this.todos.splice(start, end)
         },
-
-
+        filterValue() {
+            // const sortData = JSON.parse(localStorage.getItem('todos'))
+            if (this.sortValue === 'complit') {
+                return this.todos.filter(e => e.complit === true)
+            }
+            if (this.sortValue === 'uncomplit') {
+                return this.todos.filter(e => e.complit === false)
+            }
+            return this.todos
+        },
     },
-    
     mounted() {
         this.loadTodos()
     },
@@ -127,7 +116,7 @@ export default {
 </script>
 
 <style>
-    body{
+body{
         margin: 0;
         padding: 0;
         font-family: Arial;
@@ -168,7 +157,8 @@ export default {
         max-width: 800px;
     }
     .todo-wrapper{
-        width: 800px;
+        display: flex;
+        max-width: 800px;
         margin: 0 auto;
         background-color: #E0FFFF;
         padding: 15px 30px;
@@ -185,6 +175,83 @@ export default {
         color: white;
         border-radius: 3px;
     }
+    .todos-filter{
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        max-width: 370px;
+    }
+    .todos-filter__button{
+        padding: 10px;
+        margin-right: 10px;
+        border: none;
+        font-family: Arial;
+        font-size: 15px;
+        background: #000080;
+        font-weight: 600;
+        color: white;
+        border-radius: 3px;
+    }
+    .pagination {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
 
+    .pagination li {
+        padding: 0 8px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
 
+    .pagination-button {
+        width: 38px;
+        height: 38px;
+        background: #adeff7;
+        border: 1px solid #adeff7;
+        border-radius: 3px;
+    }
+
+    .pagination-button:hover {
+        background-color: #8feef7;
+    }
+
+    .active {
+        border: 1px solid #000040;
+        width: 38px;
+        height: 38px;
+        border-radius: 3px;
+        background: #000080;
+        font-weight: 900;
+        color: white;
+    }
+
+    .active:hover {
+        background: #000080;
+    }
+
+    @media (max-width:767px) {
+        .title {
+            font-size: 24px;
+        }
+
+        .todo-wrapper {
+            max-width: none;
+        }
+
+    }
+
+    @media (max-width:576px) {
+        .title {
+            font-size: 24px;
+        }
+
+        .todo-wrapper {
+            max-width: none;
+        }
+        .todos-filter{
+            max-width: none;
+        }
+
+    }
 </style>

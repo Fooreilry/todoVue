@@ -2,10 +2,10 @@
     <ul class="todo-list" v-if="todos.length !== 0">
         <transition-group name="todo-list">
         <todo-item 
-            v-for="(todo, index) in todos" 
+            v-for="todo in todos" 
             :key="todo.id"
             :todo="todo"
-            @remove="$emit('remove', index)"
+            @remove="$emit('remove', todo)"
             @complit="$emit('complit', todo.complit)"
             />
         </transition-group>

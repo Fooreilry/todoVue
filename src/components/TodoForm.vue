@@ -30,7 +30,7 @@ export default {
 }
 </script>
 <style scoped>
-    .todo-form{
+.todo-form{
         display: flex;
     }
     .todo-form__input{
@@ -46,5 +46,18 @@ export default {
     }
     .add-button:hover{
         background: #000040;
+    }
+    @media (max-width:576px) {
+        .todo-form {
+            flex-direction: column;
+        }
+
+        .todo-form__input {
+            margin-bottom: 5px;
+        }
+
+        .add-button {
+            margin: 0;
+        }
     }
 </style>

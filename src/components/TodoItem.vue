@@ -1,7 +1,9 @@
 <template>
     <li class= "todo-list__item">
+        <div class="todo-list__item-todo">
         <div @click="changeStyle" :class="[todo.complit ? 'todo-list__checkbox_complite' : '']" class="todo-list__checkbox"></div>
         <p :class="[todo.complit ? 'todo-list__text_complit' : '']" class="todo-list__text">{{todo.text}}</p>
+        </div>
         <button @click="$emit('remove', index)" class="button button__delete">Delete</button>
     </li>
 </template>
@@ -25,22 +27,29 @@ export default {
 
 
 <style scoped>
-    .todo-list__item{
+.todo-list__item{
         width: 100%;
         margin-bottom: 10px ;
-        padding: 3px 10px;
-
+        padding: 0px 10px;
         background: #adeff7;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-radius: 3px;
     }
+    .todo-list__item-todo {
+        display: flex;
+        width: 100%;
+        margin: 4px 0;
+        border-radius: 3px;
+        align-items: center;
+    }
     .todo-list__checkbox{
         border: 1px solid #000080;
         width: 38px;
         height: 38px;
         border-radius: 3px;
+        flex-shrink: 0;
     }
     .todo-list__checkbox:hover{
         background-color: #8feef7;
@@ -63,10 +72,12 @@ export default {
         background-color: #0b76ef
     }
     .todo-list__text{
+        margin-left: 8px;
         width: 75%;
         text-align: justify;
         word-break:break-all;
         hyphens: auto;
+        word-wrap: break-word;
     }
     .todo-list__text_complit{
         text-decoration: line-through;
@@ -78,5 +89,19 @@ export default {
     }
     .button__delete:hover{
         background: #600000;
+    }
+    @media (max-width:576px) {
+        .todo-list__item {
+            flex-direction: column;
+        }
+
+        .button__delete {
+            width: 100%;
+        }
+
+        .todo-list__text {
+            width: 100%;
+        }
+
     }
 </style>
