@@ -1,7 +1,8 @@
 <template >
-    <select v-model="modelValue" @change="changeOptions">
-        <option value="">Все</option>
+    <select class="select" v-model="modelValue" @change="changeOptions">
+        <option class="options__disabled" disabled  value="">Фильтры</option>
         <option 
+        class="options"
         v-for="option in options" 
         :key="option.value" 
         :value="option.value">
@@ -28,6 +29,36 @@ export default {
     }
 }
 </script>
-<style >
-    
+<style scoped>
+.select{
+        padding: 8px 15px;
+        border: none;
+        border: 1px solid #000080;
+        border-radius: 5px;
+        color: black;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .options{
+        padding: 8px 15px;
+        border: none;
+        border: 1px solid #000080;
+        border-radius: 5px;
+        color: black;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: #E0FFFF;
+    }
+    .options__disabled{
+        background-color: #000080;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+
+    }
+        @media (max-width:576px) {  
+            .select{
+                width: 100%;
+            }
+        }
 </style>
