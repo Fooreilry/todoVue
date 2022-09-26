@@ -37,7 +37,7 @@ export default {
         border-radius: 5px;
         color: black;
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 400;
     }
     .options{
         padding: 8px 15px;
@@ -46,7 +46,6 @@ export default {
         border-radius: 5px;
         color: black;
         font-size: 16px;
-        font-weight: 600;
         background-color: #E0FFFF;
     }
     .options__disabled{

@@ -15,7 +15,6 @@
             <todo-list
             :todos="filterValue"
             @remove="removeTodo"
-            @complit="saveValue"
             />
             <ul class="pagination">
                 <li v-for="pageNumber in totalPages" :key="pageNumber">
@@ -39,10 +38,9 @@ export default {
     data() {
         return {
             todos: [],
-            // todosOnePage:[],
-            limit: 8,
-            totalPages: 0,
-            page: 1,
+            // limit: 8,
+            // totalPages: 0,
+            // page: 1,
             sortValue: '',
             filteOptions: [
                 { value: 'complit', name: 'Выполненные' },
@@ -53,52 +51,25 @@ export default {
     methods: {
         createTodo(todo) {
             this.todos.push(todo)
-            this.saveTodos()
-        },
-        
-        saveValue(todo) {
-            console.log(todo);
-            // this.todos.sort((a, b) => (a.complit > b.complit) ? 1:-1) //Сортировка))))
-            this.saveTodos()
         },
         removeTodo(todo) {
             this.todos = this.todos.filter(e => e.id !== todo.id)
-            this.saveTodos()
         },
         
-        changePage(pageNumber) {
-            this.page = pageNumber
-        },
-        saveTodos() {
-            try {
-                
-                const todosParsed = JSON.stringify(this.todos)
-                localStorage.setItem('todos', todosParsed)
-            }
-            catch(err) {
-                console.log(err);
-            }
-
-        },
-        async loadTodos() {
-            const todoData = await JSON.parse(localStorage.getItem('todos'))
-            if (todoData === null) {
-                this.todos = []
-            }
-            this.todos = todoData
-        }
+        // changePage(pageNumber) {
+        //     this.page = pageNumber
+        // }
     },
     computed: {
-        totalPages() {
-            return this.totalPages = Math.ceil(this.todos.length / this.limit)
-        },
-        todosCount() {
-            const start = (this.page -1) * this.limit,
-                end = start + this.limit;
-            return this.todos.splice(start, end)
-        },
+        // totalPages() {
+        //     return this.totalPages = Math.ceil(this.todos.length / this.limit)
+        // },
+        // todosCount() {
+        //     const start = (this.page -1) * this.limit,
+        //         end = start + this.limit;
+        //     return this.todos.slice(start, end)
+        // },
         filterValue() {
-            // const sortData = JSON.parse(localStorage.getItem('todos'))
             if (this.sortValue === 'complit') {
                 return this.todos.filter(e => e.complit === true)
             }
@@ -107,9 +78,6 @@ export default {
             }
             return this.todos
         },
-    },
-    mounted() {
-        this.loadTodos()
     },
 
 }

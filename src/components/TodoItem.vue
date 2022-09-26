@@ -19,7 +19,6 @@ export default {
     methods: {
         changeStyle() {
             this.todo.complit ? this.todo.complit = false : this.todo.complit = true;
-            this.$emit('complit', this.todo.complit);
         }
     },
 }

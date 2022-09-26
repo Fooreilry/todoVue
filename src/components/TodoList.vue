@@ -2,15 +2,15 @@
     <ul class="todo-list" v-if="todos.length !== 0">
         <transition-group name="todo-list">
         <todo-item 
+            
             v-for="todo in todos" 
             :key="todo.id"
             :todo="todo"
             @remove="$emit('remove', todo)"
-            @complit="$emit('complit', todo.complit)"
             />
         </transition-group>
     </ul>
-    <p class="todo-list__none " v-else-if="todos.length === 0">New todos not found</p>
+    <p class="todo-list__none" v-else-if="todos.length === 0">New todos not found</p>
 </template>
 <script>
 import TodoItem from './TodoItem.vue';
