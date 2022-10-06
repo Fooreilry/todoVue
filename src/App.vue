@@ -13,7 +13,7 @@
                 />
             </div>
             <todo-list
-            :todos="filterValue"
+            :todos="todosCount"
             @remove="removeTodo"
             />
             <ul class="pagination">
@@ -38,9 +38,9 @@ export default {
     data() {
         return {
             todos: [],
-            // limit: 8,
-            // totalPages: 0,
-            // page: 1,
+            limit: 8,
+            totalPages: 0,
+            page: 1,
             sortValue: '',
             filteOptions: [
                 { value: 'complit', name: 'Выполненные' },
@@ -56,19 +56,12 @@ export default {
             this.todos = this.todos.filter(e => e.id !== todo.id)
         },
         
-        // changePage(pageNumber) {
-        //     this.page = pageNumber
-        // }
+        changePage(pageNumber) {
+            this.page = pageNumber
+        }
     },
     computed: {
-        // totalPages() {
-        //     return this.totalPages = Math.ceil(this.todos.length / this.limit)
-        // },
-        // todosCount() {
-        //     const start = (this.page -1) * this.limit,
-        //         end = start + this.limit;
-        //     return this.todos.slice(start, end)
-        // },
+
         filterValue() {
             if (this.sortValue === 'complit') {
                 return this.todos.filter(e => e.complit === true)
@@ -77,6 +70,14 @@ export default {
                 return this.todos.filter(e => e.complit === false)
             }
             return this.todos
+        },
+        totalPages() {
+            return this.totalPages = Math.ceil(this.filterValue.length / this.limit)
+        },
+        todosCount() {
+            const start = (this.page - 1) * this.limit,
+                end = start + this.limit;
+            return this.filterValue.slice(start, end)
         },
     },
 
